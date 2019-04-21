@@ -1,0 +1,717 @@
+(LINKED LIST WITH PROTOTYPES)
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
+struct node
+{
+    int data;       // the data part
+    struct node *next;      // the link part
+}*head;   //declares a global instance of struct node
+            // called head
+typedef float f;
+
+typedef struct node sn;
+
+// Function prototypes
+void append(int num);
+void add( int num );
+void addafter(int num, int loc);
+void insert(int num);
+int delete(int num);
+void display(struct node *r);
+int count();
+
+// main function
+int  main()
+{
+    int i, num;
+    head = NULL;
+
+    struct node *n;
+
+
+    while(true)
+    {
+        printf("\nList Operations\n");
+        printf("===============\n");
+        printf("1.Insert\n");
+        printf("2.Display\n");
+        printf("3.Size\n");
+        printf("4.Delete\n");
+        printf("5.Exit\n");
+        printf("Enter your choice : ");
+
+
+        if(scanf("%d", &i) <= 0)
+        {
+            printf("Enter only an Integer\n");
+            exit(0);
+        }
+        else
+        {
+            switch(i)
+            {
+                case 1:
+                    printf("Enter the number to insert : ");
+                    scanf("%d", &num);
+                    insert(num);
+                    break;
+                case 2:
+                    if(head == NULL)
+                    {
+                        printf("List is Empty\n");
+                    }
+                    else
+                    {
+                        printf("Element(s) in the list are : ");
+                    }
+                    display(head);
+                    break;
+                case 3:
+                    printf("Size of the list is %d\n",count());
+                    break;
+                case 4:
+                    if(head == NULL)
+                        printf("List is Empty\n");
+                    else
+                    {
+                        printf("Enter the number to delete : ");
+                        scanf("%d",&num);
+
+                        if(delete(num))
+                            printf("%d deleted successfully\n",num);
+                        else
+                            printf("%d not found in the list\n",num);
+                    }
+                    break;
+                case 5:
+                    return 0;
+                default:
+                    printf("Invalid option\n");
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+void insert(int num)
+{
+    int c = 0;
+    struct node *temp;
+    temp = head;
+
+    // the linked list is empty
+    if(temp == NULL)
+    {
+        add(num);
+    }
+    else
+    {
+        // traverse the linked list while we don't find the end
+        while(temp != NULL)
+        {
+            // sorting data to be in numeric order
+            if(temp->data < num)
+                c++;
+            // this is where we want to put the data, update the pointer for the next node
+            temp = temp->next;
+        }
+
+        if(c == 0)
+            add(num);
+        else if(c < count())
+            addafter(num, ++c);
+        else
+            append(num);
+    }
+}
+
+// Function definitions
+void append(int num)
+{
+    struct node *temp,*right;
+    // new node with data
+    temp = (struct node *)malloc(sizeof(struct node));
+    temp->data = num;
+    temp->next = NULL;
+
+    right=(struct node *)head;
+
+    while(right->next != NULL)
+        right = right->next;
+
+    // add new node to the end
+    right->next = temp;
+    right = temp;
+    right->next = NULL;
+}
+
+// adding a node to the beginning of the linked list
+void add( int num )
+{
+    struct node *temp;
+    temp =(struct node *)malloc(sizeof(struct node));
+    temp->data = num;
+
+    //  the linked list is empty
+    if (head == NULL)
+    {
+        head = temp;
+        head->next = NULL;
+    }
+    // at least one node on the linked list, update the next pointer
+    // the current first node is being set as the second node
+    // the new first node is temp
+    // update the beginning of the linked list head and set it equal to temp
+    // had head
+    // created temp
+    // move head to node 2
+    // make temp node 1
+    // reset the head to the beginning which is currently called temp
+    else
+    {
+        // adding new node temp to the front of the linked list
+        temp->next = head;
+        // resets head to the front of the linked list
+        head = temp;
+    }
+}
+
+void addafter(int num, int loc)
+{
+    int i;
+    struct node *temp,*left,*right;
+    // set the node right equal to the head, the beginning
+    right = head;
+    // looping through the linked list until we find the desired location to insert the node
+    for(i = 1; i < loc; i++)
+    {
+        left = right;
+        printf("position of the linked list %d\n\n", left->data );
+        right = right->next;
+    }
+
+    temp = (struct node *)malloc(sizeof(struct node));
+    temp->data = num;
+    left->next = temp;
+    left = temp;
+    left->next = right;
+
+    return;
+}
+
+int delete(int num)
+{
+    struct node *temp, *prev;
+    temp = head;
+
+    while(temp != NULL)
+    {
+        if(temp->data == num)
+        {
+            // is the node to delete at the front?
+            if(head->data == num)
+            {
+                head = temp->next;
+                head = (*temp).next;
+                free(temp);
+                return 1;
+            }
+            else
+            {
+                prev->next = temp->next;
+                free(temp);
+                return 1;
+            }
+        }
+        else
+        {
+            prev = temp;
+            temp = temp->next;
+        }
+    }
+    return 0;
+}
+
+void  display(struct node *r)
+{
+    r = head;
+
+    // the linked list is empty
+    if(r == NULL)
+    {
+        return;
+    }
+
+    while(r != NULL)
+    {
+        printf("%d ", r->data);
+        // this traverses the linked list
+        r = r->next;
+
+        if(r == NULL)
+        {
+            printf("\nfound the end of our linked list!");
+
+        }
+    }
+
+    printf("\n");
+}
+
+int count()
+{
+    struct node *n;
+    int c = 0;
+    n = head;
+
+    while(n != NULL)
+    {
+        n = n->next;
+        c++;
+    }
+
+    return c;
+}
+
+
+(QUEUE LINKED)
+
+/*
+ * C Program to Implement Queue Data Structure using Linked List
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int info;
+    struct node *ptr;
+}*front,*rear,*temp,*front1;
+
+// function prototypes
+int frontelement();
+void enq(int data);
+void deq();
+void empty();
+void display();
+void create();
+void queuesize();
+
+int count = 0;
+
+void main()
+{
+    int no, ch, e;
+
+    printf("\n 1 - Enqueue");
+    printf("\n 2 - Dequeue");
+    printf("\n 3 - Front element");
+    printf("\n 4 - Empty");
+    printf("\n 5 - Exit");
+    printf("\n 6 - Display");
+    printf("\n 7 - Queue size");
+    create();
+    while (1)
+    {
+        printf("\n Enter choice : ");
+        scanf("%d", &ch);
+        switch (ch)
+        {
+        case 1:
+            printf("Enter data : ");
+            scanf("%d", &no);
+            enq(no);
+            break;
+        case 2:
+            deq();
+            break;
+        case 3:
+            e = frontelement();
+            if (e != 0)
+                printf("Front element : %d", e);
+            else
+                printf("\n No front element in Queue as queue is empty");
+            break;
+        case 4:
+            empty();
+            break;
+        case 5:
+            exit(0);
+        case 6:
+            display();
+            break;
+        case 7:
+            queuesize();
+            break;
+        default:
+            printf("Wrong choice, Please enter correct choice  ");
+            break;
+        }
+    }
+}
+
+/* Create an empty queue */
+void create()
+{
+    front = rear = NULL;
+}
+
+/* Returns queue size */
+void queuesize()
+{
+    printf("\n Queue size : %d", count);
+}
+
+/* Enqueing the queue */
+void enqueue(int data)
+{
+    if (rear == NULL)
+    {
+        rear = (struct node *)malloc(sizeof(struct node));
+        rear->ptr = NULL;
+        rear->info = data;
+        front = rear;
+    }
+    else
+    {
+        temp = (struct node *)malloc(sizeof(struct node));
+        rear->ptr = temp;
+        temp->info = data;
+        temp->ptr = NULL;
+
+        rear = temp;
+    }
+    count++;
+}
+
+/* Displaying the queue elements */
+void display()
+{
+    front1 = front;
+
+    if ((front1 == NULL) && (rear == NULL))
+    {
+        printf("Queue is empty");
+        return;
+    }
+    while (front1 != rear)
+    {
+        printf("%d ", front1->info);
+        front1 = front1->ptr;
+    }
+    if (front1 == rear)
+        printf("%d", front1->info);
+}
+
+/* Dequeing the queue */
+void deq()
+{
+    front1 = front;
+
+    // the queue is empty
+    if (front1 == NULL)
+    {
+        printf("\n Error: Trying to display elements from empty queue");
+        return;
+    }
+    else
+        // is there more than one node on the queue?
+        if (front1->ptr != NULL)
+        {
+            front1 = front1->ptr;
+            printf("\n Dequed value : %d", front->info);
+            free(front);
+            front = front1;
+        }
+        // there is only one node on the queue, so the queue is empty, set nodes to NULL
+        else
+        {
+            printf("\n Dequed value : %d", front->info);
+            free(front);
+            front = NULL;
+            rear = NULL;
+        }
+        count--;
+}
+
+/* Returns the front element of queue */
+int frontelement()
+{
+    if ((front != NULL) && (rear != NULL))
+        return(front->info);
+    else
+        return 0;
+}
+
+/* Display if queue is empty or not */
+void empty()
+{
+     if ((front == NULL) && (rear == NULL))
+        printf("\n Queue empty");
+    else
+       printf("Queue not empty");
+}
+
+
+(STACKED LINKED)
+
+/*
+ * C Program to Implement a Stack using Linked List
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int info;
+    struct node *ptr;
+}*top,*top1,*temp;
+
+int topelement();
+void push(int data);
+void pop();
+void empty();
+void display();
+void destroy();
+void stack_count();
+void create();
+
+int count = 0;
+
+void main()
+{
+    int no, ch, e;
+
+    no = 1 * 2.5;
+    printf("no = %d\n ", no);
+
+    // for an array, implemented as a stack
+    // in this case we have to check if the dataArray is full (i.e. can we add
+    // another data element?) before allowing a push()
+    int dataArray[] = {1,
+                       2,
+                       3,
+                       4,
+                       5
+                       };
+                       // stack view
+                       // 5
+                       // 4
+                       // 3
+                       // 2
+                       // 1
+
+    printf("\n 1 - Push");
+    printf("\n 2 - Pop");
+    printf("\n 3 - Top");
+    printf("\n 4 - Empty");
+    printf("\n 5 - Exit");
+    printf("\n 6 - Display");
+    printf("\n 7 - Stack Count");
+    printf("\n 8 - Destroy stack");
+
+    create();
+
+    while (1)
+    {
+        printf("\n Enter choice : ");
+        scanf("%d", &ch);
+
+        switch (ch)
+        {
+        case 1:
+            printf("Enter data : ");
+            scanf("%d", &no);
+            push(no);
+            break;
+        case 2:
+            pop();
+            break;
+        case 3:
+            if (top == NULL)
+                printf("No elements in stack");
+            else
+            {
+                e = topelement();
+                printf("\n Top element : %d", e);
+            }
+            break;
+        case 4:
+            empty();
+            break;
+        case 5:
+            exit(0);
+        case 6:
+            display();
+            break;
+        case 7:
+            stack_count();
+            break;
+        case 8:
+            destroy();
+            break;
+        default :
+            printf(" Wrong choice, Please enter correct choice  ");
+            break;
+        }
+    }
+}
+
+/* Create empty stack */
+void create()
+{
+    top = NULL;
+}
+
+/* Count stack elements */
+void stack_count()
+{
+    printf("\n No. of elements in stack : %d", count);
+}
+
+/* Push data into stack */
+void push(int data)
+{
+    // the stack is empty
+    if (top == NULL)
+    {
+        top =(struct node *)malloc(sizeof(struct node));
+        top->ptr = NULL;
+        top->info = data;
+    }
+    // there is at least one node on the stack
+    else
+    {
+        // allocate memory for the new node
+        temp =(struct node *)malloc(sizeof(struct node));
+        // set the new nodes pointer to look at top
+        temp->ptr = top;
+        // set the data on the new node
+        temp->info = data;
+        // reset top to be temp so it is the top of the stack again
+        top = temp;
+    }
+    count++;
+}
+
+/* Display stack elements */
+void display()
+{
+    top1 = top;
+
+    if (top1 == NULL)
+    {
+
+        printf("Stack is empty");
+        return;
+    }
+    // loop until we find the end of the stack (i.e. its
+    // pointer equals NULL
+    while (top1 != NULL)
+    {
+        printf("%d \n", top1->info);
+        top1 = top1->ptr;
+    }
+ }
+
+/* Pop Operation on stack */
+void pop()
+{
+    top1 = top;
+
+    // empty stack
+    if (top1 == NULL)
+    {
+        printf("\n Error : Trying to pop from empty stack");
+        return;
+    }
+    else
+        // correlate to slides, this moves the pointer from the address of
+        // 5 to the address of 4
+
+        // moving top to the node below itself
+        top1 = top1->ptr;
+        printf("\n Popped value : %d", top->info);
+        // removing from memory
+        free(top);
+        // reset top to the new top after the pop
+        top = top1;
+        // decrement counter of node count
+        count--;
+}
+
+/* Return top element */
+int topelement()
+{
+    return(top->info);
+}
+
+/* Check if stack is empty or not */
+void empty()
+{
+    if (top == NULL)
+        printf("\n Stack is empty");
+    else
+        printf("\n Stack is not empty with %d elements", count);
+}
+
+/* Destroy entire stack */
+void destroy()
+{
+    top1 = top;
+
+    // while there are still nodes in the stack, loop and free
+    while (top1 != NULL)
+    {
+        // move pointer of top to the node below it
+        top1 = top->ptr;
+        // now free the node on top
+        free(top);
+        // set top to the new top stored in the helper node
+        top = top1;
+        // move the pointer for the next node
+        top1 = top1->ptr;
+    }
+    // free the last node
+    free(top1);
+    // NOW you can reset top to NULL
+    top = NULL;
+
+    printf("\n All stack elements destroyed");
+    count = 0;
+}
+
+
+(INPUT)
+
+Zucchini, Squash, pound, 2.19, 45
+Yellow, Squash, pound, 1.79, 15
+Tomatoes, Ugly Ripe, each, .99, 67
+Strawberries, , package, 4.99, 38
+Spaghetti, Squash, each, 1.99, 18
+Raspberries, Red, package, 3.99, 50
+Radishes, Red, package, .99, 25
+Peppers, Jalapeno, pound, .99, 7
+Peppers, Green, each, .59, 100
+Orange, Navel, pound, 1.99, 80
+Okra, , package, 6.99, 12
+Mushrooms, Shiitake, package, 4.99, 20
+Mango, , each, 3.59, 44
+Lime, Persian, each, .10, 60
+Lettuce, Iceberg, each, 1.19, 100
+Lemon, , each, .29, 40
+Kiwi, , each, .99, 20
+Green Beans, Stringless, pound, 1.59, 80
+Grapes, Red Seedless, pound, 1.99, 8
+Eggplant, Japanese, each, 1.59, 10
+Cauliflower, , each, 2.59, 26
+Cantaloupe, , each, 1.49, 53
+Broccoli, Florets, package, 3.45, 67
+Blueberries, , package, 3.99, 43
+Asparagus, , pound, 2.54, 23
+Apple, Granny Smith, pound, 2.99, 100
